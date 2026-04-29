@@ -1,15 +1,14 @@
 "use client";
 import { motion } from 'framer-motion';
-import { useForm } from '@formspree/react'; // On simplifie l'import
+import { useForm } from '@formspree/react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import 'react-phone-number-input/style.css';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 
 export default function Contact() {
-  // CORRECTION ICI : On ajoute une sécurité pour que Vercel ne plante pas si l'ID est vide
-  const formKey = process.env.NEXT_PUBLIC_FORMSPREE_ID || "votre_id_ici";
-  const [state, handleSubmit] = useForm(formKey);
+  // MODIFICATION EFFECTUÉE : Ton ID Formspree est maintenant intégré directement
+  const [state, handleSubmit] = useForm("mbdqnzpk"); 
   
   const [contactMethod, setContactMethod] = useState("email");
   const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
