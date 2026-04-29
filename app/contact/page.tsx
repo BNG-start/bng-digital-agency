@@ -1,14 +1,15 @@
 "use client";
 import { motion } from 'framer-motion';
-import { useForm, ValidationError } from '@formspree/react';
+import { useForm } from '@formspree/react'; // On simplifie l'import
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import 'react-phone-number-input/style.css';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 
 export default function Contact() {
-  // Utilisation de la variable d'environnement pour sécuriser l'ID
-  const [state, handleSubmit] = useForm(process.env.NEXT_PUBLIC_FORMSPREE_ID as string);
+  // CORRECTION ICI : On ajoute une sécurité pour que Vercel ne plante pas si l'ID est vide
+  const formKey = process.env.NEXT_PUBLIC_FORMSPREE_ID || "votre_id_ici";
+  const [state, handleSubmit] = useForm(formKey);
   
   const [contactMethod, setContactMethod] = useState("email");
   const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
@@ -24,12 +25,10 @@ export default function Contact() {
     setSubmissionTime(formattedDate);
   }, []);
 
-  // Validation dynamique (Email ou Téléphone)
   const isPhoneValid = contactMethod === "phone" 
     ? (phoneNumber ? isValidPhoneNumber(phoneNumber) : false) 
     : true;
 
-  // Le bouton s'active seulement si les infos sont valides ET la case cochée
   const canSubmit = isPhoneValid && isAgreed && !state.submitting;
 
   if (state.succeeded) {
@@ -69,13 +68,9 @@ export default function Contact() {
         </motion.h1>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* SÉCURITÉ : Champ Honeypot contre les robots */}
           <input type="text" name="_gotcha" style={{ display: 'none' }} />
-          
-          {/* INFOS SYSTÈME */}
           <input type="hidden" name="Date_Envoi" value={submissionTime} />
 
-          {/* Nom complet */}
           <div className="flex flex-col gap-2">
             <label className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em] ml-1">Nom complet</label>
             <input 
@@ -132,7 +127,6 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Service */}
           <div className="flex flex-col gap-2">
             <label className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em] ml-1">Nature du projet</label>
             <div className="relative">
@@ -152,7 +146,6 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Message */}
           <div className="flex flex-col gap-2">
             <label className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em] ml-1">Détails</label>
             <textarea 
@@ -164,7 +157,6 @@ export default function Contact() {
             ></textarea>
           </div>
 
-          {/* MODIF LÉGALE : Case à cocher RGPD */}
           <div className="flex items-start gap-3 px-1">
             <input 
               type="checkbox" 
@@ -180,7 +172,6 @@ export default function Contact() {
             </label>
           </div>
 
-          {/* Bouton d'envoi dynamique */}
           <motion.button 
             whileHover={canSubmit ? { scale: 1.01 } : {}}
             whileTap={canSubmit ? { scale: 0.99 } : {}}
