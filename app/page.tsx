@@ -113,12 +113,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Final */}
-      <section className="py-20 px-6">
-        <div className="max-w-7xl mx-auto bg-accentBlue rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden group">
+      {/* CTA Final (Corrigé pour Mobile & Responsive) */}
+      <section className="py-20 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto bg-accentBlue rounded-[2rem] md:rounded-[3rem] p-8 sm:p-12 md:p-24 text-center relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-white/20 transition-all duration-1000"></div>
-          <h2 className="text-4xl md:text-7xl font-bold text-white mb-10 tracking-tighter leading-tight">Prêt à dominer <br /> le digital ?</h2>
-          <Link href="/contact" className="inline-block bg-white text-accentBlue px-16 py-6 rounded-full text-xl font-black hover:scale-105 transition shadow-2xl">
+          
+          {/* Titre responsive : plus petit sur mobile (text-3xl) et grand sur PC (md:text-7xl) */}
+          <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-8 md:mb-10 tracking-tighter leading-tight">
+            Prêt à dominer <br /> le digital ?
+          </h2>
+          
+          {/* Bouton responsive : paddings et texte réduits sur mobile, max-width pour éviter l'étirement */}
+          <Link href="/contact" className="inline-block w-full sm:w-auto max-w-[280px] sm:max-w-none bg-white text-accentBlue px-6 py-4 sm:px-16 sm:py-6 rounded-full text-base sm:text-xl font-black hover:scale-105 transition shadow-2xl">
             Parlons de votre projet
           </Link>
         </div>
