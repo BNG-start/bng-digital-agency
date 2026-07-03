@@ -41,10 +41,10 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-8 leading-[1.1] text-white"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight md:tracking-tighter mb-8 leading-[1.15] text-white"
           >
             Designez l'avenir <br className="hidden md:block" />
-            <span className="whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-accentBlue via-blue-400 to-cyan-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accentBlue via-blue-400 to-cyan-300">
               de votre business.
             </span>
           </motion.h1>
