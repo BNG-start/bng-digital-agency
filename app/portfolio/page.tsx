@@ -15,11 +15,11 @@ export default function Portfolio() {
       image: "/images/love.jpg" 
     },
     { 
-      title: "Identité Visuelle Média", 
-      category: "Brand Visuals & Identity",
-      desc: "Conception stratégique d'affiches publicitaires et chartes graphiques pour médias digitaux.",
-      details: "Pour ce projet, nous avons transformé une simple demande d'affichage en une véritable stratégie de marque. Création de visuels haute définition avec un travail approfondi sur la psychologie des couleurs et la hiérarchie typographique pour maximiser l'impact visuel en environnement urbain et digital.",
-      image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=800" 
+      title: "A&A Food' — Identité & Campagnes", 
+      category: "Branding & Communication",
+      desc: "Création d'une identité de marque ancrée dans la culture malienne pour un service de livraison de plats traditionnels.",
+      details: "Conception du logo, de la palette terracotta et or, et des motifs inspirés du Bogolan. Déclinaison en supports promotionnels hebdomadaires (Tô, Woudjila) pour accompagner le lancement des offres du service de livraison basé à Kalaban Coura.",
+      image: "/images/aa-food-poster-woudjila.jpg" 
     },
     { 
       title: "Storytelling Commerces de Proximité", 
