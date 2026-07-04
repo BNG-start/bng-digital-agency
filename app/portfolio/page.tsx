@@ -18,22 +18,16 @@ export default function Portfolio() {
       title: "A&A Food' — Identité & Campagnes", 
       category: "Branding & Communication",
       desc: "Création d'une identité de marque ancrée dans la culture malienne pour un service de livraison de plats traditionnels.",
-      details: "Conception du logo, de la palette terracotta et or, et des motifs inspirés du Bogolan. Déclinaison en supports promotionnels hebdomadaires (Tô, Woudjila) pour accompagner le lancement des offres du service de livraison basé à Kalaban Coura.",
+      details: "Conception du logo, de la palette terracotta et or, et des motifs inspirés du Bogolan. Déclinaison en supports promotionnels hebdomadaires (Tô, Woudjila) pour accompagner le lancement des offres du service de livraison basé à Kalaban Coura. (Les prix visibles sur l'affiche sont ceux des plats du client, non de nos prestations.)",
       image: "/images/aa-food-poster-woudjila.jpg" 
     },
     { 
-      title: "Storytelling Commerces de Proximité", 
+      title: "BBK Barber — Storytelling Vidéo", 
       category: "Video Production", 
-      desc: "Campagnes vidéo immersives pour restaurants, barbershops et établissements locaux.",
-      details: "Production de contenus vidéo format court optimisés pour les réseaux sociaux. Notre approche repose sur le storytelling cinématographique : capturer l'essence de l'artisanat local pour créer un lien authentique entre le commerce et sa communauté.",
-      image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=800" 
-    },
-    { 
-      title: "Gestion d'Écosystèmes Sociaux", 
-      category: "Marketing & Strategy", 
-      desc: "Stratégies de contenu et community management pour marques et particuliers.",
-      details: "Analyse data-driven et déploiement d'une ligne éditoriale cohérente. Nous avons géré l'intégralité de l'écosystème social, de la planification des posts à l'interaction communautaire, générant une croissance organique significative et une amélioration de la notoriété de marque.",
-      image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=800" 
+      desc: "Vidéo promotionnelle immersive pour BBK Barber Shop, valorisant le savoir-faire et l'ambiance du salon.",
+      details: "Production d'un contenu vidéo court, pensé pour les réseaux sociaux, capturant l'atmosphère et le professionnalisme de BBK Barber Shop, situé à Sirakoro Cité BMS. Notre approche a mis en avant l'expertise du barbier à travers un montage dynamique et une mise en scène soignée de l'espace.",
+      image: "/images/bbk-barber-shop.jpg",
+      videoLink: "https://www.instagram.com/stories/highlights/18129921559532413/"
     },
   ];
 
@@ -142,9 +136,21 @@ export default function Portfolio() {
                     </h2>
                   </div>
 
-                  <div className="rounded-[2rem] overflow-hidden border border-white/5 aspect-video">
-                    <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-cover" />
+                  <div className="rounded-[2rem] overflow-hidden border border-white/5 bg-black/40">
+                    <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-auto object-contain" />
                   </div>
+
+                  {selectedProject.videoLink && (
+                    <a 
+                      href={selectedProject.videoLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-3 w-full border border-accentBlue text-accentBlue py-4 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-accentBlue hover:text-white transition-all duration-500"
+                    >
+                      Voir la vidéo sur Instagram
+                      <span className="text-lg">↗</span>
+                    </a>
+                  )}
 
                   <div>
                     <h4 className="text-white font-bold uppercase text-[10px] tracking-widest mb-4 opacity-50">L'approche BNG</h4>

@@ -30,6 +30,20 @@ export default function About() {
           </div>
         </div>
 
+        {/* Fondateur */}
+        <div className="mb-32 flex justify-center">
+          <div className="max-w-2xl text-center p-12 bg-white/5 rounded-[2.5rem] border border-white/10">
+            <div className="w-16 h-16 rounded-full bg-accentBlue/20 flex items-center justify-center mx-auto mb-6">
+              <span className="text-accentBlue text-2xl font-bold">MB</span>
+            </div>
+            <p className="text-xl text-gray-300 italic leading-relaxed mb-6">
+              "J'ai fondé BNG avec une idée simple : Bamako a autant de talent et d'ambition que n'importe quelle capitale mondiale. Notre travail, c'est de le prouver à travers chaque projet."
+            </p>
+            <p className="text-white font-bold tracking-tight">Mohamed S. Bengaly</p>
+            <p className="text-accentBlue text-xs uppercase tracking-[0.2em] mt-1">Fondateur & CEO</p>
+          </div>
+        </div>
+
         {/* Valeurs */}
         <div>
           <h2 className="text-3xl font-bold mb-12 text-center tracking-tight">Nos Valeurs Fondamentales</h2>
