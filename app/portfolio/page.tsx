@@ -5,6 +5,8 @@ import { useState } from 'react';
 export default function Portfolio() {
   // État pour gérer le projet sélectionné
   const [selectedProject, setSelectedProject] = useState(null);
+  // État pour gérer l'image actuellement affichée en grand dans le panneau
+  const [activeImage, setActiveImage] = useState(null);
 
   const projects = [
     { 
@@ -29,7 +31,34 @@ export default function Portfolio() {
       image: "/images/bbk-barber-shop.jpg",
       videoLink: "https://www.instagram.com/stories/highlights/18129921559532413/"
     },
+    { 
+      title: "Dia'agro — Gamme d'Étiquettes Produits", 
+      category: "Branding & Packaging",
+      desc: "Habillage complet d'une gamme de produits agroalimentaires bio, avec une identité visuelle cohérente sur toute la gamme.",
+      details: "Conception d'une gamme complète d'étiquettes produits pour Dia'agro, entreprise agroalimentaire valorisant les produits du terroir. Déclinaison cohérente de l'identité de marque (logo, palette vert forêt et or) sur 8 références : Jus de Souchet, Poisson sec, Fonio précuit, Huile de palme rouge, Brisure de maïs, Djouka précuit, Farine de maïs et Pâte d'arachides.",
+      image: "/images/dia-agro/huile-palme-rouge.jpg",
+      gallery: [
+        "/images/dia-agro/jus-de-souchet.jpg",
+        "/images/dia-agro/poisson-sec.jpg",
+        "/images/dia-agro/fonio-precuit.jpg",
+        "/images/dia-agro/huile-palme-rouge.jpg",
+        "/images/dia-agro/brisure-mais.jpg",
+        "/images/dia-agro/djouka-precuit.jpg",
+        "/images/dia-agro/farine-mais.jpg",
+        "/images/dia-agro/pate-arachide.jpg",
+      ]
+    },
   ];
+
+  const openProject = (project) => {
+    setSelectedProject(project);
+    setActiveImage(project.image);
+  };
+
+  const closeProject = () => {
+    setSelectedProject(null);
+    setActiveImage(null);
+  };
 
   return (
     <div className="bg-premiumBlack text-white min-h-screen pt-32 pb-20">
@@ -63,7 +92,7 @@ export default function Portfolio() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.8 }}
               className="group cursor-pointer"
-              onClick={() => setSelectedProject(project)}
+              onClick={() => openProject(project)}
             >
               <div className="relative overflow-hidden rounded-[2.5rem] bg-white/5 aspect-[16/10] mb-8 border border-white/5 shadow-2xl transition-all duration-500 group-hover:border-white/20">
                 <img 
@@ -107,7 +136,7 @@ export default function Portfolio() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={() => setSelectedProject(null)}
+                onClick={closeProject}
                 className="absolute inset-0 bg-black/80 backdrop-blur-md"
               />
               
@@ -120,7 +149,7 @@ export default function Portfolio() {
                 className="relative bg-[#0A0A0A] w-full md:w-[550px] h-full shadow-2xl border-l border-white/10 p-8 md:p-16 overflow-y-auto"
               >
                 <button 
-                  onClick={() => setSelectedProject(null)}
+                  onClick={closeProject}
                   className="group flex items-center gap-3 text-gray-500 hover:text-white transition-colors mb-12 uppercase text-[10px] font-bold tracking-[0.3em]"
                 >
                   <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span> Fermer l'aperçu
@@ -137,7 +166,7 @@ export default function Portfolio() {
                   </div>
 
                   <div className="rounded-[2rem] overflow-hidden border border-white/5 bg-black/40">
-                    <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-auto object-contain" />
+                    <img src={activeImage} alt={selectedProject.title} className="w-full h-auto object-contain" />
                   </div>
 
                   {selectedProject.videoLink && (
@@ -150,6 +179,33 @@ export default function Portfolio() {
                       Voir la vidéo sur Instagram
                       <span className="text-lg">↗</span>
                     </a>
+                  )}
+
+                  {selectedProject.gallery && (
+                    <div>
+                      <h4 className="text-white font-bold uppercase text-[10px] tracking-widest mb-4 opacity-50">
+                        La gamme complète ({selectedProject.gallery.length})
+                      </h4>
+                      <div className="grid grid-cols-3 gap-3">
+                        {selectedProject.gallery.map((img, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setActiveImage(img)}
+                            className={`aspect-square rounded-xl overflow-hidden border transition-all duration-300 ${
+                              activeImage === img 
+                                ? 'border-accentBlue ring-2 ring-accentBlue' 
+                                : 'border-white/5 hover:border-white/30'
+                            }`}
+                          >
+                            <img 
+                              src={img} 
+                              alt={`${selectedProject.title} - visuel ${i + 1}`} 
+                              className="w-full h-full object-cover bg-black/40"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   )}
 
                   <div>
