@@ -1,24 +1,34 @@
 "use client";
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Footer() {
   const [isContactOpen, setIsContactOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isContactOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsContactOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isContactOpen]);
 
   return (
     <>
       <footer className="bg-premiumBlack border-t border-white/10 pt-20 pb-10 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12">
-          
+
           {/* COLONNE LOGO */}
           <div className="flex flex-col gap-6 md:col-span-2">
             <Link href="/" className="flex flex-col items-start transition-transform duration-300 group hover:scale-105 origin-left">
-              <Image 
-                src="/images/logo-bng.png" 
-                alt="BNG Logo" 
-                width={100} 
-                height={100} 
+              <Image
+                src="/images/logo-bng.png"
+                alt="BNG Logo"
+                width={100}
+                height={100}
                 className="h-16 w-auto object-contain"
               />
               <span className="text-[10px] font-bold tracking-[0.25em] text-accentBlue uppercase mt-3">
@@ -38,7 +48,7 @@ export default function Footer() {
               <li><Link href="/portfolio" className="hover:text-accentBlue transition-colors">Nos Projets</Link></li>
               <li><Link href="/about" className="hover:text-accentBlue transition-colors">L'Agence</Link></li>
               <li>
-                <button 
+                <button
                   onClick={() => setIsContactOpen(true)}
                   className="hover:text-accentBlue transition-colors cursor-pointer text-left"
                 >
@@ -66,13 +76,14 @@ export default function Footer() {
               {/* On pointe vers la page unique /legal qui regroupe tout */}
               <li><Link href="/legal" className="hover:text-accentBlue transition-colors">Confidentialité & Mentions</Link></li>
             </ul>
-            
+
             <h4 className="text-white font-bold mb-4 uppercase tracking-widest text-[10px]">Social</h4>
             <div className="flex gap-4">
-              <a 
-                href="https://www.instagram.com/bng_digital_agency" 
-                target="_blank" 
+              <a
+                href="https://www.instagram.com/bng_digital_agency"
+                target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Instagram BNG Digital Agency"
                 className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:border-pink-500 hover:text-pink-500 transition-all duration-300"
               >
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -97,59 +108,75 @@ export default function Footer() {
       </footer>
 
       {/* MODALE DE CONTACT PREMIUM */}
-      {isContactOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-          <div 
-            className="absolute inset-0 bg-black/80 backdrop-blur-xl animate-in fade-in duration-500"
-            onClick={() => setIsContactOpen(false)}
-          />
-          <div className="relative bg-[#0A0A0A] border border-white/10 p-8 md:p-12 rounded-[2rem] max-w-2xl w-full shadow-[0_0_50px_rgba(0,0,0,1)] animate-in zoom-in-95 duration-300">
-            <button 
+      <AnimatePresence>
+        {isContactOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 bg-black/80 backdrop-blur-xl"
               onClick={() => setIsContactOpen(false)}
-              className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
+            />
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Prenons contact"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="relative bg-[#0A0A0A] border border-white/10 p-8 md:p-12 rounded-[2rem] max-w-2xl w-full shadow-[0_0_50px_rgba(0,0,0,1)]"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            <div className="text-center mb-10">
-              <h3 className="text-white text-3xl font-bold mb-3 uppercase tracking-tighter">Prenons contact</h3>
-              <p className="text-gray-500 text-sm">Discutons de votre prochain projet d'envergure.</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <a 
-                href="mailto:bngdigitalagency@gmail.com"
-                className="group p-6 bg-white/[0.03] border border-white/5 rounded-2xl hover:border-accentBlue transition-all duration-500"
+              <button
+                onClick={() => setIsContactOpen(false)}
+                aria-label="Fermer"
+                className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"
               >
-                <div className="text-accentBlue text-[10px] font-bold uppercase tracking-widest mb-4">Envoyer un mail</div>
-                <div className="text-white text-sm font-medium group-hover:translate-x-1 transition-transform break-all">
-                  bngdigitalagency@gmail.com
-                </div>
-              </a>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
 
-              <a 
-                href="https://wa.me/22391220321"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group p-6 bg-white/[0.03] border border-white/5 rounded-2xl hover:border-green-500 transition-all duration-500"
-              >
-                <div className="text-green-500 text-[10px] font-bold uppercase tracking-widest mb-4">WhatsApp Direct</div>
-                <div className="text-white text-sm font-medium group-hover:translate-x-1 transition-transform">
-                  +223 91 22 03 21
-                </div>
-              </a>
-            </div>
+              <div className="text-center mb-10">
+                <h3 className="text-white text-3xl font-bold mb-3 uppercase tracking-tighter">Prenons contact</h3>
+                <p className="text-gray-500 text-sm">Discutons de votre prochain projet d'envergure.</p>
+              </div>
 
-            <div className="mt-10 pt-8 border-t border-white/5 text-center">
-              <span className="text-[10px] font-bold tracking-[0.3em] text-gray-600 uppercase">
-                Bamako • Mali • International
-              </span>
-            </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a
+                  href="mailto:bngdigitalagency@gmail.com"
+                  className="group p-6 bg-white/[0.03] border border-white/5 rounded-2xl hover:border-accentBlue transition-all duration-500"
+                >
+                  <div className="text-accentBlue text-[10px] font-bold uppercase tracking-widest mb-4">Envoyer un mail</div>
+                  <div className="text-white text-sm font-medium group-hover:translate-x-1 transition-transform break-all">
+                    bngdigitalagency@gmail.com
+                  </div>
+                </a>
+
+                <a
+                  href="https://wa.me/22391220321"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group p-6 bg-white/[0.03] border border-white/5 rounded-2xl hover:border-green-500 transition-all duration-500"
+                >
+                  <div className="text-green-500 text-[10px] font-bold uppercase tracking-widest mb-4">WhatsApp Direct</div>
+                  <div className="text-white text-sm font-medium group-hover:translate-x-1 transition-transform">
+                    +223 91 22 03 21
+                  </div>
+                </a>
+              </div>
+
+              <div className="mt-10 pt-8 border-t border-white/5 text-center">
+                <span className="text-[10px] font-bold tracking-[0.3em] text-gray-600 uppercase">
+                  Bamako • Mali • International
+                </span>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 }

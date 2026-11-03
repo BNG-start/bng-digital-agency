@@ -46,7 +46,7 @@ export default function LegalPage() {
               </ul>
             </div>
             <p className="text-sm leading-relaxed">
-              Vos données ne sont **jamais vendues, louées ou cédées** à des tiers. Vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles sur simple demande.
+              Vos données ne sont <strong className="text-white">jamais vendues, louées ou cédées</strong> à des tiers. Vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles sur simple demande.
             </p>
           </section>
 

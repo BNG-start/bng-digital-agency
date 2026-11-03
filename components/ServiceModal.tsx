@@ -1,7 +1,32 @@
 "use client";
+import { useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function ServiceModal({ isOpen, onClose, service }: any) {
+export type Service = {
+  title: string;
+  description: string;
+  img: string;
+  fullDetails: string;
+  points: string[];
+};
+
+type ServiceModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  service: Service | null;
+};
+
+export default function ServiceModal({ isOpen, onClose, service }: ServiceModalProps) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen, onClose]);
+
   if (!service) return null;
 
   return (
@@ -18,7 +43,10 @@ export default function ServiceModal({ isOpen, onClose, service }: any) {
           />
           
           {/* Contenu de la Modale */}
-          <motion.div 
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={service.title}
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -26,13 +54,20 @@ export default function ServiceModal({ isOpen, onClose, service }: any) {
           >
             <button 
               onClick={onClose}
+              aria-label="Fermer"
               className="absolute top-6 right-6 text-white/50 hover:text-white z-10 text-2xl"
             >
               ✕
             </button>
 
             <div className="h-48 w-full relative">
-               <img src={service.img} className="w-full h-full object-cover opacity-60" alt="" />
+               <Image
+                 src={service.img}
+                 alt={service.title}
+                 fill
+                 sizes="(max-width: 768px) 100vw, 672px"
+                 className="object-cover opacity-60"
+               />
                <div className="absolute inset-0 bg-gradient-to-t from-premiumBlack to-transparent" />
             </div>
 

@@ -1,14 +1,15 @@
 "use client";
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import SectionWrapper from '@/components/SectionWrapper';
-import ServiceModal from '@/components/ServiceModal';
+import ServiceModal, { type Service } from '@/components/ServiceModal';
 
 export default function ServicesPage() {
   // État pour savoir quel service est sélectionné
-  const [selectedService, setSelectedService] = useState<any>(null);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
 
-  const services = [
+  const services: Service[] = [
     {
       title: "Création Web",
       description: "Des sites vitrines et e-commerce ultra-performants sous Next.js.",
@@ -44,6 +45,42 @@ export default function ServicesPage() {
     }
   ];
 
+  const packs = [
+    {
+      name: 'Site Vitrine',
+      delay: 'Délai indicatif : 2 à 4 semaines',
+      features: [
+        'Design sur mesure, mobile-first',
+        "Jusqu'à 5 pages + blog",
+        'SEO de base et analytics',
+        'Bouton WhatsApp intégré',
+        'Formation à la prise en main',
+      ],
+    },
+    {
+      name: 'Branding',
+      delay: 'Délai indicatif : 1 à 2 semaines',
+      features: [
+        'Logo + charte graphique',
+        'Cartes de visite et papeterie',
+        'Kit réseaux sociaux',
+        'Fichiers sources livrés',
+        '2 séries de révisions',
+      ],
+    },
+    {
+      name: 'Pack Lancement',
+      delay: 'Délai indicatif : 3 à 5 semaines',
+      features: [
+        'Site vitrine + branding',
+        'Pages réseaux sociaux',
+        'Campagne de lancement',
+        'Production vidéo courte',
+        'Suivi 30 jours inclus',
+      ],
+    },
+  ];
+
   return (
     <div className="bg-premiumBlack min-h-screen pt-20">
       {/* 1. HERO SECTION */}
@@ -66,13 +103,13 @@ export default function ServicesPage() {
 
         {/* 2. GRILLE DE SERVICES */}
         <div className="grid md:grid-cols-3 gap-8">
-          {services.map((s, i) => (
+          {services.map((s) => (
             <motion.div 
-              key={i}
+              key={s.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: services.indexOf(s) * 0.1 }}
               className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] text-left group hover:border-accentBlue/50 transition-all duration-500"
             >
               <h3 className="text-2xl font-bold text-white mb-4">{s.title}</h3>
@@ -99,18 +136,50 @@ export default function ServicesPage() {
         service={selectedService} 
       />
 
-      {/* 4. CTA SECTION */}
+      {/* 4. PACKS */}
+      <SectionWrapper className="text-center pt-0">
+        <h2 className="text-3xl md:text-5xl font-bold mb-4 text-white tracking-tight">
+          Nos packs<span className="text-accentBlue">.</span>
+        </h2>
+        <p className="text-gray-400 max-w-2xl mx-auto mb-12">
+          Des formules claires pour démarrer. Chaque projet restant unique, le chiffrage final se fait sur devis gratuit sous 24 heures.
+        </p>
+        <div className="grid md:grid-cols-3 gap-8 text-left">
+          {packs.map((p) => (
+            <div key={p.name} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:border-accentBlue/50 transition-all duration-500 flex flex-col">
+              <h3 className="text-2xl font-bold text-white mb-2">{p.name}</h3>
+              <p className="text-accentBlue text-xs font-bold uppercase tracking-widest mb-8">{p.delay}</p>
+              <ul className="space-y-3 mb-10 flex-1">
+                {p.features.map((f) => (
+                  <li key={f} className="flex items-start gap-3 text-gray-300 text-sm">
+                    <span className="text-accentBlue mt-0.5">✓</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/contact"
+                className="block text-center border border-white/20 text-white py-4 rounded-xl font-bold hover:bg-accentBlue hover:border-accentBlue transition"
+              >
+                Demander un devis
+              </Link>
+            </div>
+          ))}
+        </div>
+      </SectionWrapper>
+
+      {/* 5. CTA SECTION */}
       <SectionWrapper className="text-center py-24">
         <div className="bg-accentBlue/10 p-12 md:p-20 rounded-[3rem] border border-accentBlue/20">
           <h2 className="text-3xl md:text-5xl font-bold mb-8 text-white tracking-tight">
             Prêt à lancer votre projet ?
           </h2>
-          <button 
-            onClick={() => window.location.href='/contact'}
-            className="bg-white text-black px-12 py-5 rounded-full text-xl font-black hover:scale-105 transition"
+          <Link
+            href="/contact"
+            className="inline-block bg-white text-black px-12 py-5 rounded-full text-xl font-black hover:scale-105 transition"
           >
             Parlons-en maintenant
-          </button>
+          </Link>
         </div>
       </SectionWrapper>
     </div>

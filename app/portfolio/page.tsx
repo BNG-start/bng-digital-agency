@@ -1,14 +1,46 @@
 "use client";
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+
+type Project = {
+  title: string;
+  category: string;
+  desc: string;
+  details: string;
+  image: string;
+  videoLink?: string;
+  gallery?: string[];
+  galleryLabel?: string;
+};
 
 export default function Portfolio() {
   // État pour gérer le projet sélectionné
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   // État pour gérer l'image actuellement affichée en grand dans le panneau
-  const [activeImage, setActiveImage] = useState(null);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
 
-  const projects = [
+  const projects: Project[] = [
+    {
+      title: "Coulba Services — Logiciel de gestion sur mesure",
+      category: "Logiciel sur mesure",
+      desc: "Application de gestion complète pour un transitaire malien : facturation, transit, missions chauffeurs et finances dans une PWA hors-ligne.",
+      details: "Partis d'une feuille blanche et des documents papier du client, nous avons conçu chaque règle métier au plus près du terrain — remise sur TTC, cycle des missions au port, circuit d'annulation comptable — validée avec les opérationnels puis verrouillée par 121 tests automatisés. Le résultat : une PWA installable qui fonctionne sans connexion, une sécurité de niveau bancaire (biométrie, audit complet, sauvegardes chiffrées) et une interface premium aux couleurs de l'entreprise.",
+      image: "/images/coulba-services/logiciel/cover.svg"
+    },
+    {
+      title: "Coulba Services — Site vitrine",
+      category: "Site vitrine",
+      desc: "Vitrine publique du transitaire malien, porte d'entrée grand public du logiciel de gestion interne : le site capte les demandes de devis, l'outil les traite.",
+      details: "Sur un marché où la confiance se gagne au téléphone et sur WhatsApp, nous avons dessiné un site qui parle le langage des clients : un parcours limpide « du port à la livraison », des mots simples, et le bon bouton au bon moment — Appeler, WhatsApp, Devis — jusque dans une barre d'action permanente sur mobile. Pages ultralégères sans aucun tracker, SEO et accessibilité soignés : une vitrine premium qui convertit dès la première visite.",
+      image: "/images/coulba-services/site/accueil-hero-desktop.png",
+      gallery: [
+        "/images/coulba-services/site/accueil-hero-desktop.png",
+        "/images/coulba-services/site/accueil-hero-mobile.png",
+      ],
+      galleryLabel: "Aperçus"
+    },
     { 
       title: "Love Connect - Expérience Digitale", 
       category: "Web Development", 
@@ -21,7 +53,12 @@ export default function Portfolio() {
       category: "Branding & Communication",
       desc: "Création d'une identité de marque ancrée dans la culture malienne pour un service de livraison de plats traditionnels.",
       details: "Conception du logo, de la palette terracotta et or, et des motifs inspirés du Bogolan. Déclinaison en supports promotionnels hebdomadaires (Tô, Woudjila) pour accompagner le lancement des offres du service de livraison basé à Kalaban Coura. (Les prix visibles sur l'affiche sont ceux des plats du client, non de nos prestations.)",
-      image: "/images/aa-food-poster-woudjila.jpg" 
+      image: "/images/aa-food-poster-woudjila.jpg",
+      gallery: [
+        "/images/aa-food-poster-woudjila.jpg",
+        "/images/aa-food-poster-to.jpg",
+      ],
+      galleryLabel: "Aperçus"
     },
     { 
       title: "BBK Barber — Storytelling Vidéo", 
@@ -46,11 +83,12 @@ export default function Portfolio() {
         "/images/dia-agro/djouka-precuit.jpg",
         "/images/dia-agro/farine-mais.jpg",
         "/images/dia-agro/pate-arachide.jpg",
-      ]
+      ],
+      galleryLabel: "La gamme complète"
     },
   ];
 
-  const openProject = (project) => {
+  const openProject = (project: Project) => {
     setSelectedProject(project);
     setActiveImage(project.image);
   };
@@ -59,6 +97,15 @@ export default function Portfolio() {
     setSelectedProject(null);
     setActiveImage(null);
   };
+
+  useEffect(() => {
+    if (!selectedProject) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeProject();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selectedProject]);
 
   return (
     <div className="bg-premiumBlack text-white min-h-screen pt-32 pb-20">
@@ -86,7 +133,7 @@ export default function Portfolio() {
         <div className="grid md:grid-cols-2 gap-12">
           {projects.map((project, index) => (
             <motion.div 
-              key={index}
+              key={project.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -95,9 +142,11 @@ export default function Portfolio() {
               onClick={() => openProject(project)}
             >
               <div className="relative overflow-hidden rounded-[2.5rem] bg-white/5 aspect-[16/10] mb-8 border border-white/5 shadow-2xl transition-all duration-500 group-hover:border-white/20">
-                <img 
-                  src={project.image} 
+                <Image
+                  src={project.image}
                   alt={project.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover w-full h-full transition duration-[1.5s] group-hover:scale-110 opacity-60 group-hover:opacity-100 grayscale-[50%] group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-premiumBlack via-transparent to-transparent opacity-90 group-hover:opacity-40 transition-opacity duration-500"></div>
@@ -141,7 +190,10 @@ export default function Portfolio() {
               />
               
               {/* Le contenu */}
-              <motion.div 
+              <motion.div
+                role="dialog"
+                aria-modal="true"
+                aria-label={selectedProject.title}
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
@@ -150,6 +202,7 @@ export default function Portfolio() {
               >
                 <button 
                   onClick={closeProject}
+                  aria-label="Fermer l'aperçu"
                   className="group flex items-center gap-3 text-gray-500 hover:text-white transition-colors mb-12 uppercase text-[10px] font-bold tracking-[0.3em]"
                 >
                   <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span> Fermer l'aperçu
@@ -165,8 +218,16 @@ export default function Portfolio() {
                     </h2>
                   </div>
 
-                  <div className="rounded-[2rem] overflow-hidden border border-white/5 bg-black/40">
-                    <img src={activeImage} alt={selectedProject.title} className="w-full h-auto object-contain" />
+                  <div className="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden border border-white/5 bg-black/40">
+                    {activeImage && (
+                      <Image
+                        src={activeImage}
+                        alt={selectedProject.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 550px"
+                        className="object-contain"
+                      />
+                    )}
                   </div>
 
                   {selectedProject.videoLink && (
@@ -184,23 +245,26 @@ export default function Portfolio() {
                   {selectedProject.gallery && (
                     <div>
                       <h4 className="text-white font-bold uppercase text-[10px] tracking-widest mb-4 opacity-50">
-                        La gamme complète ({selectedProject.gallery.length})
+                        {selectedProject.galleryLabel ?? 'Aperçus'} ({selectedProject.gallery.length})
                       </h4>
                       <div className="grid grid-cols-3 gap-3">
                         {selectedProject.gallery.map((img, i) => (
                           <button
-                            key={i}
+                            key={img}
                             onClick={() => setActiveImage(img)}
-                            className={`aspect-square rounded-xl overflow-hidden border transition-all duration-300 ${
+                            aria-label={`Voir le visuel ${i + 1}`}
+                            className={`relative aspect-square rounded-xl overflow-hidden border transition-all duration-300 ${
                               activeImage === img 
                                 ? 'border-accentBlue ring-2 ring-accentBlue' 
                                 : 'border-white/5 hover:border-white/30'
                             }`}
                           >
-                            <img 
-                              src={img} 
-                              alt={`${selectedProject.title} - visuel ${i + 1}`} 
-                              className="w-full h-full object-cover bg-black/40"
+                            <Image
+                              src={img}
+                              alt={`${selectedProject.title} - visuel ${i + 1}`}
+                              fill
+                              sizes="150px"
+                              className="object-cover bg-black/40"
                             />
                           </button>
                         ))}
@@ -215,12 +279,12 @@ export default function Portfolio() {
                     </p>
                   </div>
 
-                  <button 
-                    onClick={() => window.location.href='/contact'}
-                    className="w-full bg-accentBlue text-white py-6 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white hover:text-accentBlue transition-all duration-500 mt-8 shadow-xl shadow-accentBlue/20"
+                  <Link
+                    href="/contact"
+                    className="block text-center w-full bg-accentBlue text-white py-6 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white hover:text-accentBlue transition-all duration-500 mt-8 shadow-xl shadow-accentBlue/20"
                   >
                     Démarrer un projet similaire
-                  </button>
+                  </Link>
                 </div>
               </motion.div>
             </div>
@@ -239,12 +303,12 @@ export default function Portfolio() {
           <h2 className="text-4xl md:text-7xl font-bold mb-12 text-white tracking-tighter leading-[1.1]">
             Prêt à marquer <br /> les esprits ?
           </h2>
-          <button 
-            onClick={() => window.location.href='/contact'}
-            className="bg-white text-black px-16 py-7 rounded-full font-black text-xl hover:bg-black hover:text-white hover:scale-105 transition-all duration-500 shadow-2xl"
+          <Link
+            href="/contact"
+            className="inline-block bg-white text-black px-16 py-7 rounded-full font-black text-xl hover:bg-black hover:text-white hover:scale-105 transition-all duration-500 shadow-2xl"
           >
             Démarrer un projet
-          </button>
+          </Link>
         </motion.div>
       </div>
     </div>

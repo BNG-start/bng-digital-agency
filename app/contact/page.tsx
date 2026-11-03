@@ -7,8 +7,8 @@ import 'react-phone-number-input/style.css';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 
 export default function Contact() {
-  // MODIFICATION EFFECTUÉE : Ton ID Formspree est maintenant intégré directement
-  const [state, handleSubmit] = useForm("mbdqnzpk"); 
+  // ID Formspree lu depuis NEXT_PUBLIC_FORMSPREE_ID (.env.local), avec repli intégré
+  const [state, handleSubmit] = useForm(process.env.NEXT_PUBLIC_FORMSPREE_ID || "mbdqnzpk"); 
   
   const [contactMethod, setContactMethod] = useState("email");
   const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
@@ -167,7 +167,7 @@ export default function Contact() {
             />
             <label htmlFor="legal" className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-wider cursor-pointer">
               J'accepte que mes données soient traitées pour répondre à ma demande selon la 
-              <span className="text-accentBlue hover:underline ml-1">politique de confidentialité</span> de BNG.
+              <Link href="/legal" className="text-accentBlue hover:underline ml-1">politique de confidentialité</Link> de BNG.
             </label>
           </div>
 
