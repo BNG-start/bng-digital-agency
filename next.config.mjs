@@ -10,6 +10,11 @@ const nextConfig = {
   },
   reactStrictMode: true,
 
+  // Liens courts vers les démos : /jeux/burger -> /jeux/burger/index.html
+  async redirects() {
+    return [{ source: '/jeux/:jeu(burger|cake|coffee)', destination: '/jeux/:jeu/index.html', permanent: false }];
+  },
+
   async headers() {
     return [
       {

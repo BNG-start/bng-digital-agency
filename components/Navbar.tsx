@@ -33,8 +33,8 @@ export default function Navbar() {
         {/* Menu Desktop (Visible uniquement sur ordi) */}
         <div className="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest text-gray-300">
           <Link href="/services" className="hover:text-accentBlue transition-colors">Services</Link>
-          <a href="/#mini-jeux" className="hover:text-accentBlue transition-colors">Mini-jeux</a>
           <Link href="/portfolio" className="hover:text-accentBlue transition-colors">Projets</Link>
+          <Link href="/mini-jeux" className="hover:text-accentBlue transition-colors">Mini-jeux</Link>
           <Link href="/about" className="hover:text-accentBlue transition-colors">Agence</Link>
         </div>
 
@@ -64,8 +64,8 @@ export default function Navbar() {
       <div className={`md:hidden bg-premiumBlack border-b border-white/10 overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-screen py-6' : 'max-h-0'}`}>
         <div className="flex flex-col items-center space-y-6 text-sm font-medium uppercase tracking-[0.2em] text-gray-300">
           <Link href="/services" onClick={() => setIsOpen(false)} className="hover:text-accentBlue">Services</Link>
-          <a href="/#mini-jeux" onClick={() => setIsOpen(false)} className="hover:text-accentBlue">Mini-jeux</a>
           <Link href="/portfolio" onClick={() => setIsOpen(false)} className="hover:text-accentBlue">Projets</Link>
+          <Link href="/mini-jeux" onClick={() => setIsOpen(false)} className="hover:text-accentBlue">Mini-jeux</Link>
           <Link href="/about" onClick={() => setIsOpen(false)} className="hover:text-accentBlue">Agence</Link>
           <Link href="/contact" onClick={() => setIsOpen(false)} className="bg-accentBlue text-white px-8 py-3 rounded-full font-black">
             Parlons Projet

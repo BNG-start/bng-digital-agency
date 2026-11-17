@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { miniJeux } from './mini-jeux/jeux';
 
 export default function Home() {
   const expertises = [
@@ -75,13 +76,7 @@ export default function Home() {
     },
   ];
 
-  const vitrineJeux = "/#mini-jeux";
-
-  const miniJeux = [
-    { name: "Burger Stack", href: "/#mini-jeux" },
-    { name: "Cake Stack", href: "/#mini-jeux" },
-    { name: "Coffee Stack", href: "/#mini-jeux" },
-  ];
+  const vitrineJeux = "/mini-jeux";
 
   const faqs = [
     {
@@ -302,18 +297,23 @@ export default function Home() {
             <h2 className="text-accentBlue font-bold uppercase tracking-widest text-[10px] mb-4">Mini-jeux</h2>
             <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-white">Mini-jeux de marque.</h3>
             <p className="text-gray-400 text-lg mt-6 leading-relaxed">
-              Des jeux à vos couleurs pour vos concours et votre marketing.
+              Des jeux à vos couleurs pour vos concours et vos réseaux sociaux. Vos clients jouent, partagent leur score et vous laissent leur email. Essayez nos démos.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {miniJeux.map((jeu) => (
               <a
-                key={jeu.name}
+                key={jeu.slug}
                 href={jeu.href}
-                className="bg-white/5 border border-white/10 rounded-[2rem] p-8 hover:border-accentBlue/50 transition"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group border border-white/10 rounded-[2rem] p-8 hover:border-white/30 transition"
+                style={{ background: `linear-gradient(160deg, ${jeu.color}26, transparent 60%)` }}
               >
+                <div className="text-5xl mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">{jeu.emoji}</div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: jeu.color }}>{jeu.sector}</p>
                 <h4 className="text-xl font-bold text-white mb-6">{jeu.name}</h4>
-                <span className="text-accentBlue font-bold">Jouer →</span>
+                <span className="text-white font-bold group-hover:translate-x-1 inline-block transition-transform">Jouer →</span>
               </a>
             ))}
           </div>
