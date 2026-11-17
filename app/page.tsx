@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { miniJeux } from './mini-jeux/jeux';
+import { catalogue } from './mini-jeux/jeux';
 
 export default function Home() {
   const expertises = [
@@ -297,24 +297,23 @@ export default function Home() {
             <h2 className="text-accentBlue font-bold uppercase tracking-widest text-[10px] mb-4">Mini-jeux</h2>
             <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-white">Mini-jeux de marque.</h3>
             <p className="text-gray-400 text-lg mt-6 leading-relaxed">
-              Des jeux à vos couleurs pour vos concours et vos réseaux sociaux. Vos clients jouent, partagent leur score et vous laissent leur email. Essayez nos démos.
+              Trois formats : empiler, tourner la roue, ou gratter une carte. Vos clients jouent à votre concours et vous laissent leur email.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {miniJeux.map((jeu) => (
-              <a
-                key={jeu.slug}
-                href={jeu.href}
-                target="_blank"
-                rel="noopener noreferrer"
+            {catalogue.map((jeu) => (
+              <Link
+                key={jeu.id}
+                href={vitrineJeux}
                 className="group border border-white/10 rounded-[2rem] p-8 hover:border-white/30 transition"
                 style={{ background: `linear-gradient(160deg, ${jeu.color}26, transparent 60%)` }}
               >
                 <div className="text-5xl mb-6 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">{jeu.emoji}</div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: jeu.color }}>{jeu.sector}</p>
-                <h4 className="text-xl font-bold text-white mb-6">{jeu.name}</h4>
-                <span className="text-white font-bold group-hover:translate-x-1 inline-block transition-transform">Jouer →</span>
-              </a>
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-2" style={{ color: jeu.color }}>{jeu.short}</p>
+                <h4 className="text-xl font-bold text-white mb-3">{jeu.name}</h4>
+                <p className="text-gray-400 mb-6">{jeu.desc}</p>
+                <span className="text-white font-bold group-hover:translate-x-1 inline-block transition-transform">Voir les démos →</span>
+              </Link>
             ))}
           </div>
           <Link href={vitrineJeux} className="group relative inline-block bg-white text-black px-12 py-5 rounded-full text-lg font-bold transition overflow-hidden">

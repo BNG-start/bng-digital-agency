@@ -12,7 +12,7 @@ const nextConfig = {
 
   // Liens courts vers les démos : /jeux/burger -> /jeux/burger/index.html
   async redirects() {
-    return [{ source: '/jeux/:jeu(burger|cake|coffee)', destination: '/jeux/:jeu/index.html', permanent: false }];
+    return [{ source: '/jeux/:jeu(burger|cake|coffee|roue-pizza|roue-fashion|roue-coffee|gratte-burger|gratte-beauty|gratte-bakery)', destination: '/jeux/:jeu/index.html', permanent: false }];
   },
 
   async headers() {

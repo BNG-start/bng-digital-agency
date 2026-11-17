@@ -2,14 +2,14 @@
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { miniJeux } from './jeux';
+import { catalogue } from './jeux';
 
 const WHATSAPP = 'https://wa.me/22391220321?text=' +
   encodeURIComponent("Bonjour BNG, je suis intéressé(e) par un mini-jeu à ma marque.");
 
 const etapes = [
   { step: '01', title: 'Vous nous envoyez votre marque', desc: 'Logo, couleurs, produits et lots à gagner. Un échange WhatsApp suffit.' },
-  { step: '02', title: 'On crée votre jeu', desc: 'Vos produits deviennent les blocs du jeu, vos textes et votre langue partout.' },
+  { step: '02', title: 'On crée votre jeu', desc: 'Roue, grattage ou empilage : vos lots, vos textes et votre langue partout.' },
   { step: '03', title: 'Vous partagez le lien', desc: 'Instagram, WhatsApp, TikTok, QR code en boutique : aucun téléchargement.' },
   { step: '04', title: 'Vous récoltez les résultats', desc: 'Visibilité, partages, et la liste des emails des participants au concours.' },
 ];
@@ -17,7 +17,7 @@ const etapes = [
 const avantages = [
   { icon: '🎨', title: 'À vos couleurs', desc: 'Logo, couleurs, produits, textes : le jeu est 100 % votre marque.' },
   { icon: '🏆', title: 'Concours intégré', desc: 'Prénom, email et consentement en fin de partie pour vos tirages au sort.' },
-  { icon: '📲', title: 'Partage viral', desc: 'Chaque joueur partage son score et défie ses amis : votre marque circule.' },
+  { icon: '📲', title: 'Partage viral', desc: 'Un lien ou un QR code : le jeu circule sur Instagram, WhatsApp et en boutique.' },
   { icon: '⚡', title: 'Zéro installation', desc: 'Le jeu s’ouvre en un clic sur téléphone et ordinateur, en français ou en anglais.' },
   { icon: '🔗', title: 'Vers votre offre', desc: 'Un bouton mène directement à votre menu, votre boutique ou votre site.' },
   { icon: '🚀', title: 'Livré vite', desc: 'Votre jeu est prêt en quelques jours, hébergé et prêt à partager.' },
@@ -30,7 +30,7 @@ const formules = [
   },
   {
     name: 'Standard', price: '$249', highlight: true,
-    items: ['Tout le Basic', 'Vos produits dessinés en blocs', 'Bouton vers votre site ou menu', 'Partage du score'],
+    items: ['Tout le Basic', 'Vos produits et vos lots dans le jeu', 'Bouton vers votre site ou menu', 'Lien prêt pour vos réseaux'],
   },
   {
     name: 'Premium', price: '$499', highlight: false,
@@ -46,10 +46,12 @@ const fadeUp = {
 };
 
 export default function MiniJeuxPage() {
-  const [actif, setActif] = useState(0);
+  const [jeuIndex, setJeuIndex] = useState(0);
+  const [demoIndex, setDemoIndex] = useState(0);
   const [lance, setLance] = useState(false);
   const cadre = useRef<HTMLIFrameElement>(null);
-  const jeu = miniJeux[actif];
+  const famille = catalogue[jeuIndex] ?? catalogue[0];
+  const jeu = famille.demos[demoIndex] ?? famille.demos[0];
 
   // Donne le focus au jeu sans faire défiler la page (sinon le premier tap est perdu).
   const focusJeu = () => cadre.current?.focus({ preventScroll: true });
@@ -90,8 +92,8 @@ export default function MiniJeuxPage() {
               transition={{ delay: 0.2 }}
               className="text-gray-400 text-lg md:text-xl leading-relaxed mb-10 max-w-xl"
             >
-              Un mini-jeu à vos couleurs pour vos concours et vos réseaux sociaux. Vos clients
-              jouent, partagent leur score et vous laissent leur email. Restaurants, cafés,
+              Trois formats : empiler, tourner la roue, ou gratter une carte. Vos clients
+              jouent à votre concours et vous laissent leur email. Restaurants, cafés,
               boutiques : partout dans le monde.
             </motion.p>
             <motion.div
@@ -117,18 +119,33 @@ export default function MiniJeuxPage() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="flex flex-col items-center"
           >
-            <div className="flex gap-2 mb-6 bg-white/5 border border-white/10 rounded-full p-1.5">
-              {miniJeux.map((j, i) => (
-                <button
-                  key={j.slug}
-                  onClick={() => { setActif(i); setLance(false); }}
-                  className={`px-4 sm:px-5 py-2 rounded-full text-sm font-bold transition ${
-                    i === actif ? 'bg-white text-black' : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  {j.emoji} {j.short}
-                </button>
-              ))}
+            <div className="flex flex-col items-center gap-3 mb-6">
+              <div className="flex flex-wrap justify-center gap-2 bg-white/5 border border-white/10 rounded-full p-1.5">
+                {catalogue.map((familleJeu, i) => (
+                  <button
+                    key={familleJeu.id}
+                    onClick={() => { setJeuIndex(i); setDemoIndex(0); setLance(false); }}
+                    className={`px-4 sm:px-5 py-2 rounded-full text-sm font-bold transition ${
+                      i === jeuIndex ? 'bg-white text-black' : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    {familleJeu.emoji} {familleJeu.short}
+                  </button>
+                ))}
+              </div>
+              <div className="flex flex-wrap justify-center gap-2 bg-white/5 border border-white/10 rounded-full p-1.5">
+                {famille.demos.map((j, i) => (
+                  <button
+                    key={j.slug}
+                    onClick={() => { setDemoIndex(i); setLance(false); }}
+                    className={`px-4 sm:px-5 py-2 rounded-full text-sm font-bold transition ${
+                      i === demoIndex ? 'bg-white text-black' : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    {j.emoji} {j.short}
+                  </button>
+                ))}
+              </div>
             </div>
             <div
               className="relative aspect-[9/16] rounded-[2.75rem] border-[10px] border-neutral-800 bg-black shadow-[0_0_80px_rgba(37,99,235,0.25)] overflow-hidden"
@@ -167,7 +184,7 @@ export default function MiniJeuxPage() {
               )}
             </div>
             <p className="text-gray-500 text-sm mt-5 text-center">
-              Touchez l’écran (ou Espace) pour lâcher le bloc.{' '}
+              {famille.aide}{' '}
               <a href={jeu.href} target="_blank" rel="noopener noreferrer" className="text-accentBlue hover:underline">
                 Ouvrir en plein écran ↗
               </a>
@@ -181,29 +198,35 @@ export default function MiniJeuxPage() {
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="max-w-2xl mb-16">
             <h2 className="text-accentBlue font-bold uppercase tracking-widest text-[10px] mb-4">Démos</h2>
-            <h3 className="text-4xl md:text-6xl font-bold tracking-tight">Un jeu, mille marques.</h3>
+            <h3 className="text-4xl md:text-6xl font-bold tracking-tight">Trois jeux, mille marques.</h3>
             <p className="text-gray-400 text-lg mt-6 leading-relaxed">
-              Le même jeu addictif, transformé pour chaque client. Imaginez-le avec vos produits.
+              Empilage, roue ou grattage : le même principe, transformé pour chaque client.
             </p>
           </motion.div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {miniJeux.map((j, i) => (
-              <motion.a
-                key={j.slug}
-                {...fadeUp}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                href={j.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-[2rem] border border-white/10 p-8 hover:border-white/30 transition"
-                style={{ background: `linear-gradient(160deg, ${j.color}26, transparent 60%)` }}
-              >
-                <div className="text-6xl mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">{j.emoji}</div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-3" style={{ color: j.color }}>{j.sector}</p>
-                <h4 className="text-2xl font-bold mb-3">{j.name}</h4>
-                <p className="text-gray-400 mb-8">{j.desc}</p>
-                <span className="font-bold group-hover:translate-x-1 inline-block transition-transform">Jouer →</span>
-              </motion.a>
+          <div className="space-y-16">
+            {catalogue.map((familleJeu) => (
+              <div key={familleJeu.id}>
+                <h4 className="text-2xl font-bold mb-6">{familleJeu.emoji} {familleJeu.name}</h4>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {familleJeu.demos.map((j) => (
+                    <motion.a
+                      key={j.slug}
+                      {...fadeUp}
+                      href={j.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative overflow-hidden rounded-[2rem] border border-white/10 p-8 hover:border-white/30 transition"
+                      style={{ background: `linear-gradient(160deg, ${j.color}26, transparent 60%)` }}
+                    >
+                      <div className="text-6xl mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">{j.emoji}</div>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.3em] mb-3" style={{ color: j.color }}>{j.sector}</p>
+                      <h4 className="text-2xl font-bold mb-3">{j.name}</h4>
+                      <p className="text-gray-400 mb-8">{j.desc}</p>
+                      <span className="font-bold group-hover:translate-x-1 inline-block transition-transform">Jouer →</span>
+                    </motion.a>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
