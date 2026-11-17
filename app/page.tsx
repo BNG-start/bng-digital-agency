@@ -75,6 +75,14 @@ export default function Home() {
     },
   ];
 
+  const vitrineJeux = "/#mini-jeux";
+
+  const miniJeux = [
+    { name: "Burger Stack", href: "/#mini-jeux" },
+    { name: "Cake Stack", href: "/#mini-jeux" },
+    { name: "Coffee Stack", href: "/#mini-jeux" },
+  ];
+
   const faqs = [
     {
       q: 'Quels services propose BNG Digital Agency ?',
@@ -284,6 +292,35 @@ export default function Home() {
               </details>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Mini-jeux de marque */}
+      <section id="mini-jeux" className="py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-2xl mb-16">
+            <h2 className="text-accentBlue font-bold uppercase tracking-widest text-[10px] mb-4">Mini-jeux</h2>
+            <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-white">Mini-jeux de marque.</h3>
+            <p className="text-gray-400 text-lg mt-6 leading-relaxed">
+              Des jeux à vos couleurs pour vos concours et votre marketing.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {miniJeux.map((jeu) => (
+              <a
+                key={jeu.name}
+                href={jeu.href}
+                className="bg-white/5 border border-white/10 rounded-[2rem] p-8 hover:border-accentBlue/50 transition"
+              >
+                <h4 className="text-xl font-bold text-white mb-6">{jeu.name}</h4>
+                <span className="text-accentBlue font-bold">Jouer →</span>
+              </a>
+            ))}
+          </div>
+          <Link href={vitrineJeux} className="group relative inline-block bg-white text-black px-12 py-5 rounded-full text-lg font-bold transition overflow-hidden">
+            <span className="relative z-10">Découvrir l'offre</span>
+            <div className="absolute inset-0 bg-accentBlue translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300"></div>
+          </Link>
         </div>
       </section>
 
