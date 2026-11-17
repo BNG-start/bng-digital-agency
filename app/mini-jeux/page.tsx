@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { miniJeux } from './jeux';
 
@@ -47,7 +47,12 @@ const fadeUp = {
 
 export default function MiniJeuxPage() {
   const [actif, setActif] = useState(0);
+  const [lance, setLance] = useState(false);
+  const cadre = useRef<HTMLIFrameElement>(null);
   const jeu = miniJeux[actif];
+
+  // Donne le focus au jeu sans faire défiler la page (sinon le premier tap est perdu).
+  const focusJeu = () => cadre.current?.focus({ preventScroll: true });
 
   return (
     <div className="bg-premiumBlack min-h-screen text-white">
@@ -116,7 +121,7 @@ export default function MiniJeuxPage() {
               {miniJeux.map((j, i) => (
                 <button
                   key={j.slug}
-                  onClick={() => setActif(i)}
+                  onClick={() => { setActif(i); setLance(false); }}
                   className={`px-4 sm:px-5 py-2 rounded-full text-sm font-bold transition ${
                     i === actif ? 'bg-white text-black' : 'text-gray-400 hover:text-white'
                   }`}
@@ -125,19 +130,39 @@ export default function MiniJeuxPage() {
                 </button>
               ))}
             </div>
-            <div className="relative w-[280px] sm:w-[320px] aspect-[9/16] rounded-[2.75rem] border-[10px] border-neutral-800 bg-black shadow-[0_0_80px_rgba(37,99,235,0.25)] overflow-hidden">
+            <div
+              className="relative aspect-[9/16] rounded-[2.75rem] border-[10px] border-neutral-800 bg-black shadow-[0_0_80px_rgba(37,99,235,0.25)] overflow-hidden"
+              style={{ height: 'min(640px, calc(100svh - 220px))', minHeight: '420px' }}
+            >
               <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-5 bg-neutral-800 rounded-full z-10 pointer-events-none"></div>
-              <iframe
-                key={jeu.slug}
-                src={jeu.href}
-                title={`Démo jouable ${jeu.name}`}
-                className="w-full h-full"
-                loading="lazy"
-                allow="fullscreen; web-share"
-              />
+              {lance ? (
+                <iframe
+                  ref={cadre}
+                  key={jeu.slug}
+                  src={jeu.href}
+                  title={`Démo jouable ${jeu.name}`}
+                  className="w-full h-full block"
+                  allow="fullscreen; web-share"
+                  onLoad={focusJeu}
+                  onMouseEnter={focusJeu}
+                />
+              ) : (
+                <button
+                  onClick={() => setLance(true)}
+                  className="group absolute inset-0 flex flex-col items-center justify-center gap-6"
+                  style={{ background: `radial-gradient(circle at 50% 40%, ${jeu.color}55, #000 70%)` }}
+                  aria-label={`Jouer à ${jeu.name}`}
+                >
+                  <span className="text-7xl group-hover:scale-110 transition-transform">{jeu.emoji}</span>
+                  <span className="text-2xl font-bold">{jeu.name}</span>
+                  <span className="flex items-center gap-2 bg-white text-black px-8 py-4 rounded-full font-black group-hover:scale-105 transition">
+                    ▶ Jouer
+                  </span>
+                </button>
+              )}
             </div>
             <p className="text-gray-500 text-sm mt-5 text-center">
-              Jouez ici : touchez l’écran pour lâcher le bloc.{' '}
+              Touchez l’écran (ou Espace) pour lâcher le bloc.{' '}
               <a href={jeu.href} target="_blank" rel="noopener noreferrer" className="text-accentBlue hover:underline">
                 Ouvrir en plein écran ↗
               </a>
