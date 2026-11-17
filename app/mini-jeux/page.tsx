@@ -148,7 +148,12 @@ export default function MiniJeuxPage() {
                 />
               ) : (
                 <button
-                  onClick={() => setLance(true)}
+                  onClick={() => {
+                    // Mobile / tactile : plein écran, bien plus jouable qu'un téléphone dans le téléphone.
+                    const tactile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 1024;
+                    if (tactile) window.location.href = jeu.href;
+                    else setLance(true);
+                  }}
                   className="group absolute inset-0 flex flex-col items-center justify-center gap-6"
                   style={{ background: `radial-gradient(circle at 50% 40%, ${jeu.color}55, #000 70%)` }}
                   aria-label={`Jouer à ${jeu.name}`}
@@ -315,7 +320,7 @@ export default function MiniJeuxPage() {
               Écrire sur WhatsApp
             </a>
             <a href="mailto:bngdigitalagency@gmail.com?subject=Mini-jeu%20de%20marque" className="inline-block border border-white/40 px-10 py-5 rounded-full text-lg font-bold hover:bg-white/10 transition">
-              bngdigitalagency@gmail.com
+              Écrire par email
             </a>
           </div>
           <div className="relative mt-6">
